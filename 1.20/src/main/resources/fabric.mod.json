@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "batsremove",
+  "version": "${version}",
+  "name": "Bats Remove (1.20)",
+  "description": "Stops natural bat spawning, auto-clears existing bats once per save, and adds a /batsremove command to clear all bats.",
+  "authors": [
+    "BatsRemove"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.batsremove.BatRemoveMod"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.0",
+    "fabric-api": "*",
+    "minecraft": "~1.20",
+    "java": ">=17"
+  }
+}

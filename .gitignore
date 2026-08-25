@@ -1,0 +1,30 @@
+# Gradle
+.gradle/
+build/
+out/
+*.class
+
+# Fabric / Loom
+run/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Node (local mirror proxy deps)
+node_modules/
+
+# Local proxy generated artifacts
+tools/proxy/proxy.log
+tools/proxy/key.pem
