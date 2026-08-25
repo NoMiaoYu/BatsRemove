@@ -6,9 +6,9 @@ import net.fabricmc.fabric.api.biome.v1.ModificationPhase;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,12 +21,12 @@ public class BatRemoveMod implements ModInitializer {
     @Override
     public void onInitialize() {
         // 26.x: bats naturally spawn from biome spawn lists. Remove them from every biome
-        // so they no longer spawn naturally. Summoned bats are unaffected.
-        BiomeModifications.create(ResourceLocation.fromNamespaceAndPath(MOD_ID, "remove_bats"))
+        // so they no longer spawn naturally. Player-summoned bats are unaffected.
+        BiomeModifications.create(Identifier.fromNamespaceAndPath(MOD_ID, "remove_bats"))
             .add(
                 ModificationPhase.REMOVALS,
                 selectionContext -> true,
-                context -> context.getSpawnSettings().removeSpawnsOfEntityType(EntityType.BAT)
+                context -> context.getMobSpawnSettings().removeSpawnsOfEntityType(EntityTypes.BAT)
             );
 
         // /batsremove command

@@ -3,7 +3,7 @@
   "id": "batsremove",
   "version": "${version}",
   "name": "Bats Remove (26)",
-  "description": "Stops natural bat spawning, auto-clears existing bats once per save, and adds a /batsremove command to clear all bats. Built with official Mojang mappings (26.x).",
+  "description": "Stops natural bat spawning, auto-clears existing bats once per save, and adds a /batsremove command to clear all bats. Built for un-obfuscated 26.x (Mojang names, no mappings).",
   "authors": [
     "BatsRemove"
   ],
@@ -15,7 +15,7 @@
     ]
   },
   "depends": {
-    "fabricloader": ">=0.19.3",
+    "fabricloader": ">=0.18.4",
     "fabric-api": "*",
     "minecraft": "~26.2",
     "java": ">=25"

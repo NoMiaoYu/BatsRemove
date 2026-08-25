@@ -8,8 +8,8 @@ import java.util.List;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.storage.LevelResource;
 
 /**
@@ -44,8 +44,8 @@ public final class BatRemovalManager {
 
     private static int removeBatsFromWorld(ServerLevel world) {
         // Snapshot the bats first, because discard() mutates the entity list.
-        List<Entity> bats = world.getEntities(EntityType.BAT, e -> true);
-        for (Entity bat : bats) {
+        List<? extends Bat> bats = world.getEntities(EntityTypeTest.forClass(Bat.class), e -> true);
+        for (Bat bat : bats) {
             bat.discard();
         }
         return bats.size();

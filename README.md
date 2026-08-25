@@ -1,8 +1,8 @@
-﻿# BatsRemove — Minecraft Fabric 蝙蝠清除 Mod
+# BatsRemove — Minecraft Fabric 蝙蝠清除 Mod
 
 一个按**大版本系列**分模块的 Fabric 模组：阻止蝙蝠自然生成（召唤不受影响）、在加载存档时一次性自动清除已有蝙蝠并标记该存档、以及提供 `/batsremove` 手动清除命令。
 
-**三个模块均已在本机构建成功，产物 jar 已生成。**
+**四个模块均已在本机构建成功，产物 jar 已生成（含 26.x）。**
 
 ---
 
@@ -16,7 +16,7 @@
    - 之后再次加载该存档，检测到标记则跳过自动清除。
    - 标记文件：`<世界目录>/data/bats_removed.dat`。
 3. **手动命令清除全部蝙蝠**
-   - 命令：`/batsremove`（需要管理员权限等级 2，即 OP）。
+   - 命令：`/batsremove`（需要管理员权限，OP）。
 
 ---
 
@@ -24,28 +24,35 @@
 
 每个目录是一个**独立的 Fabric 工程**，对应一个大版本系列：
 
-| 目录 | 构建目标 | 覆盖系列 | Java | Loom | Gradle |
-|------|---------|---------|------|------|--------|
-| `1.19/` | 1.19.4 | 1.19.0 – 1.19.4 | 17 | 1.5.8 | 8.10.2 |
-| `1.20/` | 1.20.1 | 1.20.x | 17 | 1.7.4 | 8.10.2 |
-| `1.21/` | 1.21.1 | 1.21.x | 21 | 1.9.2 | 8.12 |
+| 目录 | 构建目标 | 覆盖系列 | Java | Loom | Gradle | 映射 |
+|------|---------|---------|------|------|--------|------|
+| `1.19/` | 1.19.4 | 1.19.0 – 1.19.4 | 17 | 1.5.8 | 8.10.2 | Yarn |
+| `1.20/` | 1.20.1 | 1.20.x | 17 | 1.7.4 | 8.10.2 | Yarn |
+| `1.21/` | 1.21.1 | 1.21.x | 21 | 1.9.2 | 8.12 | Yarn |
+| `26/` | 26.2 | 26.x | 25 | 1.16.2 | 9.7.1 | 无（未混淆） |
 
 ### 蝙蝠机制（经实际反编译验证）
 
-经对 remapped jar 的检查，**三个系列的蝙蝠都从生物群系生成列表（AMBIENT 组）自然生成**，
-并没有所谓的 `BatSpawner`。因此三个模块统一用 Fabric API 的
-`BiomeModifications.create(...).add(ModificationPhase.REMOVALS, ...)` 把蝙蝠从所有群系移除即可，
-无需任何 mixin。
+- **1.19 / 1.20 / 1.21**：蝙蝠从生物群系生成列表（AMBIENT 组）自然生成。统一用 Fabric API 的
+  `BiomeModifications.create(...).add(ModificationPhase.REMOVALS, ...)` 把蝙蝠从所有群系移除，无需 mixin。
+- **26.x**：Mojang 从 1.21.11 之后**彻底移除了混淆**，游戏 jar 自带真实类名（Mojang 名），
+  版本 json 不再提供映射下载（这是预期，不是缺失）。因此 26 模块**不声明任何 mappings**，
+  直接用游戏内建名字（如 `net.minecraft.world.entity.ambient.Bat`、`EntityTypes.BAT`、
+  `Identifier`、`Permissions.COMMANDS_ADMIN`）编译。
 
-> 早期版本说明曾误以为 1.19.3+ 改用全局 `BatSpawner`，实际并非如此（1.19.4 的
-> `net.minecraft.world.spawner` 包里只有 `CatSpawner/PhantomSpawner/PatrolSpawner`）。
-> 本 README 已按实际验证结果修正。
+> 26.x 构建要点（与 1.19-1.21 完全不同）：
+> - `gradle.properties` 加 `fabric.loom.disableObfuscation=true`，让 Loom 进入"非混淆环境"模式。
+> - 依赖用普通 `implementation` 而非 `modImplementation`（非混淆模式下没有 remap 配置）。
+> - 不写 `mappings` 行；Loom 1.16.2（与 Fabric API 自身 26.2 构建一致）。
+> - 早期曾误以为 26.x"无映射做不了"，实为"无需映射"——详见 Mojang 公告
+>   [Removing obfuscation in Java Edition](https://www.minecraft.net/zh-hans/article/removing-obfuscation-in-java-edition)
+>   与 [Fabric 迁移映射文档](https://docs.fabricmc.net/zh_cn/develop/porting/mappings/)。
 
 ---
 
 ## 构建方法
 
-三个工程已在本机（已装 JDK 17 / JDK 21 / Gradle）构建成功。你自己构建时：
+四个工程已在本机（已装 JDK 17 / JDK 21 / JDK 25 / Gradle）构建成功。你自己构建时：
 
 ```bash
 # 1.19 或 1.20：JDK 17 + Gradle 8.10.2
@@ -53,12 +60,16 @@ cd 1.19 && gradle build
 
 # 1.21：JDK 21 + Gradle 8.12
 cd 1.21 && gradle build
+
+# 26.x：JDK 25 + Gradle 9.7.1（需先启动 tools/proxy 镜像代理下载 MC，见下文）
+cd 26 && gradle build
 ```
 
-产物位于各工程的 `build/libs/`：
+产物位于各工程的 `build/libs/`（也已汇总复制到 `dist/`）：
 - `batsremove-1.19-1.0.0.jar`
 - `batsremove-1.20-1.0.0.jar`
 - `batsremove-1.21-1.0.0.jar`
+- `batsremove-26-1.0.0.jar`
 
 > **Loom 与 Gradle 版本必须匹配**：Loom 1.5/1.7 与 Gradle 8.12 的 Problems API 不兼容，
 > 需用 Gradle 8.10.2；Loom 1.9 需要 Gradle ≥ 8.11。上面表格里的组合是验证过的。

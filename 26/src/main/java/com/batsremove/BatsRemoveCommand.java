@@ -5,6 +5,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.permissions.Permissions;
 
 /**
  * Registers the {@code /batsremove} command.
@@ -17,7 +18,7 @@ public final class BatsRemoveCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             Commands.literal("batsremove")
-                .requires(source -> source.hasPermission(2))
+                .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_ADMIN))
                 .executes(context -> execute(context.getSource()))
         );
     }

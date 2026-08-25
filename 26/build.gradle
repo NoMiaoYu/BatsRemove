@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.17.19'
+    id 'fabric-loom' version '1.16.2'
     id 'maven-publish'
 }
 
@@ -15,14 +15,11 @@ repositories {
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    // 26.x has no Yarn mappings yet, so use official Mojang mappings.
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-}
-
-loom {
-    // Uses official Mojang mappings (set via `mappings loom.officialMojangMappings()` above)
+    // 26.x is NOT obfuscated: `fabric.loom.disableObfuscation=true` (gradle.properties) puts Loom in
+    // un-obfuscated mode. No remapping is needed, so `modImplementation` (a remap configuration)
+    // does not exist here — use plain `implementation` instead (matches Fabric API's 26.2 build).
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 
 processResources {
