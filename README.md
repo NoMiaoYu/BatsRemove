@@ -22,6 +22,8 @@
 
 ## 版本覆盖
 
+### Fabric（1.19 – 26.2）
+
 每个目录是一个**独立的 Fabric 工程**，对应一个大版本系列：
 
 | 目录 | 构建目标 | 覆盖系列 | Java | Loom | Gradle | 映射 |
@@ -30,6 +32,21 @@
 | `1.20/` | 1.20.1 | 1.20.x | 17 | 1.7.4 | 8.10.2 | Yarn |
 | `1.21/` | 1.21.1 | 1.21.x | 21 | 1.9.2 | 8.12 | Yarn |
 | `26/` | 26.2 | **26.1 – 26.2** | 25 | 1.16.2 | 9.7.1 | 无（未混淆） |
+
+### NeoForge（1.20 – 26.2，无 1.19）
+
+> NeoForge 从 1.20.1 才从 Forge 分叉，**1.19 没有 NeoForge 版本**，故 NeoForge 从 1.20 开始。
+
+| 目录 | 构建目标 | 覆盖系列 | Java | 插件 | Gradle |
+|------|---------|---------|------|------|--------|
+| `neoforge-20/` | 1.20.6 | 1.20.x | 21 | ModDevGradle 2.0.144 | 9.7.1 |
+| `neoforge-21/` | 1.21.1 | 1.21.x | 21 | ModDevGradle 2.0.144 | 9.7.1 |
+| `neoforge-26/` | 26.2 | **26.1 – 26.2** | 25 | ModDevGradle 2.0.144 | 9.7.1 |
+
+NeoForge 实现要点：用 `net.neoforged.moddev`（ModDevGradle）插件，Mojang 官方名直接编译；
+阻止自然生成用 `MobSpawnEvent.PositionCheck`（只对自然生成触发，`/summon` 不受影响），
+`setResult(PositionCheck.Result.FAIL)`；命令用 `RegisterCommandsEvent`；存档标记与 Fabric 相同
+（`<world>/data/bats_removed.dat`）。
 
 ### 蝙蝠机制（经实际反编译验证）
 

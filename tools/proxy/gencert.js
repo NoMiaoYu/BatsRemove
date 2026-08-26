@@ -3,7 +3,12 @@
 const forge = require('node-forge');
 const fs = require('fs');
 
-const hosts = ['piston-meta.mojang.com', 'piston-data.mojang.com'];
+const hosts = [
+  'piston-meta.mojang.com',
+  'piston-data.mojang.com',
+  'launchermeta.mojang.com',
+  'launcher.mojang.com'
+];
 const keys = forge.pki.rsa.generateKeyPair(2048);
 
 const cert = forge.pki.createCertificate();

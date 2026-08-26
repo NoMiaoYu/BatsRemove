@@ -80,7 +80,10 @@ const server = https.createServer(tlsOpts, async (req, res) => {
       while (expected > 0 && cur < expected && guard < MAX_RANGE) {
         let rr;
         try {
-          rr = await openStream(finalUrl, { ...h, Range: `bytes=${cur}-` });
+          // Re-resolve the upstream (bmclapi) with the Range header each time, so we get a
+          // FRESH signed CDN URL instead of reusing the possibly-expired redirect target.
+          const opened = await openFinalStream(upstream, { ...h, Range: `bytes=${cur}-` });
+          rr = opened.res;
         } catch (e) {
           break;
         }
