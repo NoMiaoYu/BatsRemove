@@ -1,0 +1,24 @@
+# BatsRemove NeoForge mod metadata.
+license="${mod_license}"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+description='''
+Stops natural bat spawning (summoned bats unaffected), auto-clears existing bats once per save on load, and adds a /batsremove command to clear all bats. Minecraft 1.20.2 - 1.20.4.
+'''
+
+[[dependencies.${mod_id}]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${neo_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"

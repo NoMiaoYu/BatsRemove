@@ -35,18 +35,20 @@
 
 ### NeoForge（1.20 – 26.2，无 1.19）
 
-> NeoForge 从 1.20.1 才从 Forge 分叉，**1.19 没有 NeoForge 版本**，故 NeoForge 从 1.20 开始。
+> NeoForge 从 1.20.1 才从 Forge 分叉，**1.19 没有 NeoForge 版本**。与 Fabric 不同，NeoForge 在一个大版本系列内
+> 存在少量 API 断裂点，因此按"API 一致区间"分 jar（这是 NeoForge 社区标准做法：每个区间构建一次 + 声明版本范围）。
 
-| 目录 | 构建目标 | 覆盖系列 | Java | 插件 | Gradle |
-|------|---------|---------|------|------|--------|
-| `neoforge-20/` | 1.20.6 | 1.20.x | 21 | ModDevGradle 2.0.144 | 9.7.1 |
-| `neoforge-21/` | 1.21.1 | 1.21.x | 21 | ModDevGradle 2.0.144 | 9.7.1 |
-| `neoforge-26/` | 26.2 | **26.1 – 26.2** | 25 | ModDevGradle 2.0.144 | 9.7.1 |
+| 目录 | 构建目标 | 覆盖范围 | Java | 插件 |
+|------|---------|---------|------|------|
+| `neoforge-1.20.4/` | 1.20.4 | **1.20.2 – 1.20.4** | 21 | ModDevGradle 2.0.144 |
+| `neoforge-20/` | 1.20.6 | **1.20.5 – 1.20.6** | 21 | ModDevGradle 2.0.144 |
+| `neoforge-21/` | 1.21.1 | **1.21.0 – 1.21.10** | 21 | ModDevGradle 2.0.144 |
+| `neoforge-21.11/` | 1.21.11 | **1.21.11** | 21 | ModDevGradle 2.0.144 |
+| `neoforge-26/` | 26.2 | **26.1 – 26.2** | 25 | ModDevGradle 2.0.144 |
 
-NeoForge 实现要点：用 `net.neoforged.moddev`（ModDevGradle）插件，Mojang 官方名直接编译；
-阻止自然生成用 `MobSpawnEvent.PositionCheck`（只对自然生成触发，`/summon` 不受影响），
-`setResult(PositionCheck.Result.FAIL)`；命令用 `RegisterCommandsEvent`；存档标记与 Fabric 相同
-（`<world>/data/bats_removed.dat`）。
+断裂点说明：1.20.5 起 `MobSpawnEvent.PositionCheck` 的结果 API 从 `Event.Result` 改为 `PositionCheck.Result`；
+1.21.11 起命令权限从 `hasPermission(int)` 改为 `PermissionSet`。其余小版本 API 一致，同一 jar 直接通用。
+1.20.1 为 NeoForge 前身（Forge 系 API），未单独适配。
 
 ### 蝙蝠机制（经实际反编译验证）
 
