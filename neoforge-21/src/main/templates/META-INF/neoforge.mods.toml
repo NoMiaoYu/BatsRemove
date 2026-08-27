@@ -1,4 +1,6 @@
 # BatsRemove NeoForge mod metadata.
+modLoader="javafml"
+loaderVersion="[4,)"
 license="${mod_license}"
 
 [[mods]] #mandatory
