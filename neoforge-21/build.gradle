@@ -5,6 +5,21 @@ plugins {
     id 'idea'
 }
 
+repositories {
+    // Aliyun mirror of Maven Central (libraries.minecraft.net is blocked in CN)
+    maven { url = 'https://maven.aliyun.com/repository/central' }
+    exclusiveContent {
+        forRepository {
+            maven { url = 'https://maven.aliyun.com/repository/central' }
+        }
+        filter { includeGroup 'org.apache.logging.log4j' }
+    }
+}
+
+
+configurations.all {
+    resolutionStrategy.cacheDynamicVersionsFor 365, 'days'
+}
 version = mod_version
 group = mod_group_id
 
